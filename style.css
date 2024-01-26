@@ -1,0 +1,34 @@
+body {
+    background-image: url(candy.png);
+}
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+
+#form {
+
+    color: rgb(249, 7, 124);
+    font-size: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 30px;
+    width: 100%;
+    margin-bottom: 30px;
+
+}
+
+#listitem {
+    color: rgb(233, 13, 163);
+    background-color: rgb(232, 223, 228);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    justify-content: space-around;
+}
