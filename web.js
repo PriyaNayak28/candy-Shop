@@ -19,7 +19,7 @@ function saveTheData(event) {
     //  Show user details on screen
     showUserOnScreen(userDetails);
 
-    axios.post("https://crudcrud.com/api/8caad7915aba4c6f8c997efd5c12201d/candyShop", userDetails)
+    axios.post("https://crudcrud.com/api/ea610a6669a74f929b413844a1dd3a58/buyYourFavCandy", userDetails)
         .then((res) => {
             console.log(res);
         }).catch((err) => {
@@ -28,7 +28,7 @@ function saveTheData(event) {
 }
 
 window.addEventListener("DOMContentLoaded", () => {
-    axios.get("https://crudcrud.com/api/8caad7915aba4c6f8c997efd5c12201d/candyShop")
+    axios.get("https://crudcrud.com/api/ea610a6669a74f929b413844a1dd3a58/buyYourFavCandy")
         .then((response) => {
             console.log(response);
             for (let i = 0; i < response.data.length; i++) {
@@ -37,6 +37,7 @@ window.addEventListener("DOMContentLoaded", () => {
         }).catch((err) => {
             console.log(err);
         });
+
 });
 
 function showUserOnScreen(user) {
@@ -46,15 +47,59 @@ function showUserOnScreen(user) {
     document.getElementById('quantity').value = '';
 
     const parentNode = document.getElementById('listitem');
-    const childHTML = `<li id=${user._id}>${user.Candy}-${user.Description}${user.Price}-${user.Quantity}
-    <button onClick="Buy1('${user._id}')"  id= 'buy1'>Buy1</button>
-    <button onClick="Buy2('${user._id}')">Buy2</button>
-    <button onClick="Buy3('${user._id}')">Buy3</button>
-    </li>`;
+    const childHTML = `<li id=${user._id}>${user.Candy}-${user.Description}-${user.Price}-<span class="quantity">${user.Quantity}</span>
+    <label for="buy1"><input type="button" onclick="buyCandy('${user._id}', '${user.Candy}', '${user.Description}', ${user.Price}, ${user.Quantity}, 1)" value="Buy 1"></label>
+    <label for="buy2"><input type="button" onclick="buyCandy('${user._id}', '${user.Candy}', '${user.Description}', ${user.Price}, ${user.Quantity}, 2)" value="Buy 2"></label>
+    <label for="buy3"><input type="button" onclick="buyCandy('${user._id}', '${user.Candy}', '${user.Description}', ${user.Price}, ${user.Quantity}, 3)" value="Buy 3"></label>
+</li>`;
 
-    parentNode.innerHTML = parentNode.innerHTML + childHTML;
-
+    parentNode.innerHTML += childHTML;
 }
 
 
+function buyCandy(id, candyName, Description, Price, availableQuantity, buyQuantity) {
+    if (availableQuantity === 0) {
+        alert(`Sorry, ${candyName} is not available.`);
+        return;
+    }
 
+    const quantityToBuy = buyQuantity;
+
+    if (quantityToBuy > availableQuantity) {
+        alert(`Sorry, only ${availableQuantity} candies are available.`);
+        return;
+    }
+
+    // Retrieve data from local storage
+    let userDetails = JSON.parse(localStorage.getItem(candyName));
+
+    // userDetails exists and initialize Quantity if not present
+    userDetails = userDetails || {};
+    userDetails.Quantity = userDetails.Quantity || availableQuantity;
+
+    userDetails.Quantity -= buyQuantity;
+
+    // Update local storage
+    localStorage.setItem(candyName, JSON.stringify(userDetails));
+
+    // Update screen
+    const listItem = document.getElementById(id);
+    const quantityElement = listItem.querySelector('.quantity');
+    quantityElement.textContent = userDetails.Quantity;
+
+    // Update CRUD API
+    const updatedDetails = {
+        Candy: candyName,
+        Description,
+        Price,
+        Quantity: userDetails.Quantity
+    };
+
+    axios.put(`https://crudcrud.com/api/ea610a6669a74f929b413844a1dd3a58/buyYourFavCandy/${id}`, updatedDetails)
+        .then((res) => {
+            console.log("API Update Successful:", res);
+        })
+        .catch((err) => {
+            console.error("API Update Error:", err);
+        });
+}

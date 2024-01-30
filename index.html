@@ -10,20 +10,23 @@
 
 <body>
 
-    <div id="main-container">
-        <form onsubmit="saveTheData(event)" id="form">
-            <label for="candyName">CandyName<input type="text" name="candyName" id="candyName" required></label><br>
-            <label for="description">Description<input type="text" name="description" id="description"
-                    required></label><br>
-            <label for="price">Price<input type="number" name="price" id="price" required></label><br>
-            <label for="quantity">Quantity<input type="number" name="quantity" id="quantity" required></label><br>
-            <button id="btn">Add </button>
-        </form>
+    <form onsubmit="saveTheData(event)">
+        <label for="candyName">CandyName<input type="text" name="candyName" id="candyName" required></label><br>
+        <label for="description">Description<input type="text" name="description" id="description" required></label><br>
+        <label for="price">Price<input type="number" name="price" id="price" required></label><br>
+        <label for="quantity">Quantity<input type="number" name="quantity" id="quantity" required></label><br>
+        <button>Add</button>
 
-        <ul id="listitem"> CandyLove : </ul>
-        <script defer src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.6.5/axios.min.js"></script>
-        <script src="web.js"></script>
-    </div>
+    </form>
+    <h3 id="h3">CandyLove :</h3>
+    <hr>
+    <ul id="listitem"></ul>
+
+
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.6.5/axios.min.js"></script>
+    <script src="web.js"></script>
+
+
 </body>
 
 </html>
